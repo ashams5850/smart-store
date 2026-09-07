@@ -7,15 +7,12 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        /* تنسيق الهيدر */
         header .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
         }
-
-        /* تنسيق زر التسجيل الأنيق */
         .auth-btn {
             background: #46a0b2;
             color: white;
@@ -37,8 +34,6 @@
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(70, 160, 178, 0.4);
         }
-
-        /* زر تسجيل الدخول (بحدود) */
         .auth-btn-outline {
             background: transparent;
             color: #46a0b2;
@@ -49,8 +44,6 @@
             background: #46a0b2;
             color: white;
         }
-
-        /* زر الخروج (لون مختلف) */
         .auth-btn-logout {
             background: transparent;
             color: #dc3545;
@@ -61,15 +54,30 @@
             background: #dc3545;
             color: white;
         }
-
-        /* منطقة الأزرار في اليمين */
+        .auth-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #1a1a2e;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .auth-user .avatar {
+            background: #46a0b2;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
         .header-auth {
             display: flex;
             align-items: center;
             gap: 10px;
         }
-
-        /* استجابة للموبايل */
         @media (max-width: 768px) {
             header .container {
                 flex-direction: column;
@@ -92,20 +100,9 @@
                 <a href="products.html">الباقات</a>
                 <a href="contact.html">تواصل معنا</a>
             </nav>
-            <!-- ✅ أزرار في أقصى اليمين (شكل أنيق) -->
-            <div class="header-auth">
-                <!-- زر تسجيل جديد (الرئيسي) -->
-                <button onclick="signup()" class="auth-btn">
-                    📝 تسجيل جديد
-                </button>
-                <!-- زر تسجيل دخول (بحدود) -->
-                <button onclick="login()" class="auth-btn auth-btn-outline">
-                    🔐 دخول
-                </button>
-                <!-- زر خروج (لون مختلف) -->
-                <button onclick="logout()" class="auth-btn auth-btn-logout">
-                    🚪 خروج
-                </button>
+            <!-- ✅ منطقة الأزرار (تتغير تلقائياً) -->
+            <div class="header-auth" id="authSection">
+                <!-- هتتحدد بواسطة JavaScript -->
             </div>
         </div>
     </header>
@@ -160,10 +157,8 @@
         </div>
     </footer>
 
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyDqOyFk7cauFKQw6h__E78LkSCiBHkgJSE",
@@ -174,37 +169,76 @@
             appId: "1:10224365969:web:2a2d0de608d0b7d329ea30",
             measurementId: "G-ZW2P5Y8CPE"
         };
-
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         console.log("✅ Firebase initialized successfully!");
 
+        // 🔥 دالة تحديث الواجهة (الأزرار) بناءً على حالة المستخدم
+        function updateUI(user) {
+            const section = document.getElementById('authSection');
+            if (user) {
+                // ✅ مستخدم مسجل دخول
+                const email = user.email;
+                const shortEmail = email.length > 20 ? email.substring(0, 20) + '...' : email;
+                section.innerHTML = `
+                    <div class="auth-user">
+                        <span class="avatar">👤</span>
+                        <span>${shortEmail}</span>
+                    </div>
+                    <button onclick="logout()" class="auth-btn auth-btn-logout">🚪 خروج</button>
+                `;
+            } else {
+                // ❌ مستخدم غير مسجل
+                section.innerHTML = `
+                    <button onclick="signup()" class="auth-btn">📝 تسجيل جديد</button>
+                    <button onclick="login()" class="auth-btn auth-btn-outline">🔐 دخول</button>
+                `;
+            }
+        }
+
+        // 🔥 مراقبة حالة المستخدم (تتغير تلقائياً عند تسجيل الدخول/الخروج)
+        auth.onAuthStateChanged(user => {
+            updateUI(user);
+        });
+
+        // دالة التسجيل
         function signup() {
             const email = prompt("📧 أدخل بريدك الإلكتروني:");
-            if (!email) return;
+            if (!email) return alert("❌ الرجاء إدخال البريد الإلكتروني");
             const password = prompt("🔑 أدخل كلمة المرور (6 أحرف على الأقل):");
-            if (!password) return;
+            if (!password) return alert("❌ الرجاء إدخال كلمة المرور");
+            if (password.length < 6) return alert("❌ كلمة المرور لازم تكون 6 أحرف على الأقل!");
             auth.createUserWithEmailAndPassword(email, password)
-                .then(() => alert("✅ تم التسجيل بنجاح!"))
+                .then((userCredential) => {
+                    alert("✅ تم التسجيل بنجاح!");
+                    updateUI(userCredential.user); // تحديث الواجهة فوراً
+                })
                 .catch(err => alert("❌ خطأ: " + err.message));
         }
 
+        // دالة تسجيل الدخول
         function login() {
             const email = prompt("📧 أدخل بريدك الإلكتروني:");
-            if (!email) return;
+            if (!email) return alert("❌ الرجاء إدخال البريد الإلكتروني");
             const password = prompt("🔑 أدخل كلمة المرور:");
-            if (!password) return;
+            if (!password) return alert("❌ الرجاء إدخال كلمة المرور");
             auth.signInWithEmailAndPassword(email, password)
-                .then(() => alert("✅ تم تسجيل الدخول!"))
+                .then((userCredential) => {
+                    alert("✅ تم تسجيل الدخول!");
+                    updateUI(userCredential.user); // تحديث الواجهة فوراً
+                })
                 .catch(err => alert("❌ خطأ: " + err.message));
         }
 
+        // دالة تسجيل الخروج
         function logout() {
             auth.signOut()
-                .then(() => alert("✅ تم تسجيل الخروج!"))
+                .then(() => {
+                    alert("✅ تم تسجيل الخروج!");
+                    updateUI(null); // تحديث الواجهة فوراً
+                })
                 .catch(err => alert("❌ خطأ: " + err.message));
         }
     </script>
-
 </body>
 </html>
