@@ -33,12 +33,19 @@
 
 <script>
   // 🔥 بيانات Firebase بتاعتك (منسوخة من الصورة)
+  <script>
   const firebaseConfig = {
     apiKey: "AIzaSyDq0yFk7cauFKQw6h_E78LkSC1BhKgJSE",
     authDomain: "smart-store-bc1e6.firebaseapp.com",
     projectId: "smart-store-bc1e6",
+    storageBucket: "smart-store-bc1e6.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:abcdef"
   };
-
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  console.log("✅ Firebase initialized successfully!");
+</script>
   // تشغيل Firebase
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
