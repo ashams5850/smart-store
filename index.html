@@ -100,10 +100,7 @@
                 <a href="products.html">الباقات</a>
                 <a href="contact.html">تواصل معنا</a>
             </nav>
-            <!-- ✅ منطقة الأزرار (تتغير تلقائياً) -->
-            <div class="header-auth" id="authSection">
-                <!-- هتتحدد بواسطة JavaScript -->
-            </div>
+            <div class="header-auth" id="authSection"></div>
         </div>
     </header>
 
@@ -173,11 +170,9 @@
         const auth = firebase.auth();
         console.log("✅ Firebase initialized successfully!");
 
-        // 🔥 دالة تحديث الواجهة (الأزرار) بناءً على حالة المستخدم
         function updateUI(user) {
             const section = document.getElementById('authSection');
             if (user) {
-                // ✅ مستخدم مسجل دخول
                 const email = user.email;
                 const shortEmail = email.length > 20 ? email.substring(0, 20) + '...' : email;
                 section.innerHTML = `
@@ -188,7 +183,6 @@
                     <button onclick="logout()" class="auth-btn auth-btn-logout">🚪 خروج</button>
                 `;
             } else {
-                // ❌ مستخدم غير مسجل
                 section.innerHTML = `
                     <button onclick="signup()" class="auth-btn">📝 تسجيل جديد</button>
                     <button onclick="login()" class="auth-btn auth-btn-outline">🔐 دخول</button>
@@ -196,12 +190,8 @@
             }
         }
 
-        // 🔥 مراقبة حالة المستخدم (تتغير تلقائياً عند تسجيل الدخول/الخروج)
-        auth.onAuthStateChanged(user => {
-            updateUI(user);
-        });
+        auth.onAuthStateChanged(user => updateUI(user));
 
-        // دالة التسجيل
         function signup() {
             const email = prompt("📧 أدخل بريدك الإلكتروني:");
             if (!email) return alert("❌ الرجاء إدخال البريد الإلكتروني");
@@ -211,12 +201,11 @@
             auth.createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     alert("✅ تم التسجيل بنجاح!");
-                    updateUI(userCredential.user); // تحديث الواجهة فوراً
+                    updateUI(userCredential.user);
                 })
                 .catch(err => alert("❌ خطأ: " + err.message));
         }
 
-        // دالة تسجيل الدخول
         function login() {
             const email = prompt("📧 أدخل بريدك الإلكتروني:");
             if (!email) return alert("❌ الرجاء إدخال البريد الإلكتروني");
@@ -225,17 +214,16 @@
             auth.signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     alert("✅ تم تسجيل الدخول!");
-                    updateUI(userCredential.user); // تحديث الواجهة فوراً
+                    updateUI(userCredential.user);
                 })
                 .catch(err => alert("❌ خطأ: " + err.message));
         }
 
-        // دالة تسجيل الخروج
         function logout() {
             auth.signOut()
                 .then(() => {
                     alert("✅ تم تسجيل الخروج!");
-                    updateUI(null); // تحديث الواجهة فوراً
+                    updateUI(null);
                 })
                 .catch(err => alert("❌ خطأ: " + err.message));
         }
