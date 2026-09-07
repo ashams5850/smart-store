@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -6,87 +6,82 @@
     <title>Smart Store - كروت ذكية احترافية</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
-</head><!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRG8WZEZP3"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <style>
+        /* تنسيق الهيدر */
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
 
-  gtag('config', 'G-YRG8WZEZP3');
-</script>
-<div style="text-align:center; margin:30px 0;">
-        <a href="#" onclick="alert('قريباً هتقدر تسجل دخولك!')" 
-           style="background:#46a0b2; color:white; padding:12px 30px; border-radius:30px; text-decoration:none; font-weight:bold; font-size:18px;">
-           🔐 سجل الآن
-        </a>
-    </div>
+        /* تنسيق زر التسجيل الأنيق */
+        .auth-btn {
+            background: #46a0b2;
+            color: white;
+            border: none;
+            padding: 8px 22px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+            box-shadow: 0 2px 8px rgba(70, 160, 178, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .auth-btn:hover {
+            background: #3a8a9a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(70, 160, 178, 0.4);
+        }
 
-    <footer>
-        <div class="container">
-            <p>Smart Store &copy; 2026 - الفيوم، مصر</p>
-        </div>
-    </footer>
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+        /* زر تسجيل الدخول (بحدود) */
+        .auth-btn-outline {
+            background: transparent;
+            color: #46a0b2;
+            border: 2px solid #46a0b2;
+            box-shadow: none;
+        }
+        .auth-btn-outline:hover {
+            background: #46a0b2;
+            color: white;
+        }
 
-<script>
-  // 🔥 بيانات Firebase بتاعتك (منسوخة من الصورة)
-  <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDq0yFk7cauFKQw6h_E78LkSC1BhKgJSE",
-    authDomain: "smart-store-bc1e6.firebaseapp.com",
-    projectId: "smart-store-bc1e6",
-    storageBucket: "smart-store-bc1e6.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:abcdef"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  console.log("✅ Firebase initialized successfully!");
-</script>
-  // تشغيل Firebase
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
+        /* زر الخروج (لون مختلف) */
+        .auth-btn-logout {
+            background: transparent;
+            color: #dc3545;
+            border: 2px solid #dc3545;
+            box-shadow: none;
+        }
+        .auth-btn-logout:hover {
+            background: #dc3545;
+            color: white;
+        }
 
-  // دالة التسجيل
-  function signup() {
-    const email = prompt("أدخل بريدك الإلكتروني:");
-    const password = prompt("أدخل كلمة المرور (6 أحرف على الأقل):");
-    auth.createUserWithEmailAndPassword(email, password)
-      .then(() => alert("✅ تم التسجيل بنجاح!"))
-      .catch(err => alert("❌ خطأ: " + err.message));
-  }
+        /* منطقة الأزرار في اليمين */
+        .header-auth {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-  // دالة تسجيل الدخول
-  function login() {
-    const email = prompt("أدخل بريدك الإلكتروني:");
-    const password = prompt("أدخل كلمة المرور:");
-    auth.signInWithEmailAndPassword(email, password)
-      .then(() => alert("✅ تم تسجيل الدخول!"))
-      .catch(err => alert("❌ خطأ: " + err.message));
-  }
-
-  // دالة تسجيل الخروج
-  function logout() {
-    auth.signOut().then(() => alert("✅ تم تسجيل الخروج!"));
-  }
-</script>
-
-<!-- الأزرار -->
-<div style="text-align:center; margin:20px 0;">
-  <button onclick="signup()" style="background:#46a0b2; color:white; padding:10px 25px; border-radius:30px; border:none; margin:5px; font-size:16px; cursor:pointer;">
-    📝 تسجيل جديد
-  </button>
-  <button onclick="login()" style="background:#28a745; color:white; padding:10px 25px; border-radius:30px; border:none; margin:5px; font-size:16px; cursor:pointer;">
-    🔐 تسجيل دخول
-  </button>
-  <button onclick="logout()" style="background:#dc3545; color:white; padding:10px 25px; border-radius:30px; border:none; margin:5px; font-size:16px; cursor:pointer;">
-    🚪 تسجيل خروج
-  </button>
-</div>
-</body>
+        /* استجابة للموبايل */
+        @media (max-width: 768px) {
+            header .container {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .header-auth {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
 <body>
 
     <header>
@@ -97,6 +92,21 @@
                 <a href="products.html">الباقات</a>
                 <a href="contact.html">تواصل معنا</a>
             </nav>
+            <!-- ✅ أزرار في أقصى اليمين (شكل أنيق) -->
+            <div class="header-auth">
+                <!-- زر تسجيل جديد (الرئيسي) -->
+                <button onclick="signup()" class="auth-btn">
+                    📝 تسجيل جديد
+                </button>
+                <!-- زر تسجيل دخول (بحدود) -->
+                <button onclick="login()" class="auth-btn auth-btn-outline">
+                    🔐 دخول
+                </button>
+                <!-- زر خروج (لون مختلف) -->
+                <button onclick="logout()" class="auth-btn auth-btn-logout">
+                    🚪 خروج
+                </button>
+            </div>
         </div>
     </header>
 
@@ -149,34 +159,52 @@
             </div>
         </div>
     </footer>
-<!-- Firebase SDK -->
+
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
     <script>
-        // 🔥 بيانات Firebase
         const firebaseConfig = {
-            apiKey: "AIzaSyDq0yFk7cauFKQw6h_E78LkSC1BhKgJSE",
+            apiKey: "AIzaSyDqOyFk7cauFKQw6h__E78LkSCiBHkgJSE",
             authDomain: "smart-store-bc1e6.firebaseapp.com",
             projectId: "smart-store-bc1e6",
+            storageBucket: "smart-store-bc1e6.firebasestorage.app",
+            messagingSenderId: "10224365969",
+            appId: "1:10224365969:web:2a2d0de608d0b7d329ea30",
+            measurementId: "G-ZW2P5Y8CPE"
         };
 
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+        console.log("✅ Firebase initialized successfully!");
 
         function signup() {
-            // ... الكود القديم
+            const email = prompt("📧 أدخل بريدك الإلكتروني:");
+            if (!email) return;
+            const password = prompt("🔑 أدخل كلمة المرور (6 أحرف على الأقل):");
+            if (!password) return;
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(() => alert("✅ تم التسجيل بنجاح!"))
+                .catch(err => alert("❌ خطأ: " + err.message));
         }
 
         function login() {
-            // ... الكود القديم
+            const email = prompt("📧 أدخل بريدك الإلكتروني:");
+            if (!email) return;
+            const password = prompt("🔑 أدخل كلمة المرور:");
+            if (!password) return;
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => alert("✅ تم تسجيل الدخول!"))
+                .catch(err => alert("❌ خطأ: " + err.message));
         }
 
         function logout() {
-            // ... الكود القديم
+            auth.signOut()
+                .then(() => alert("✅ تم تسجيل الخروج!"))
+                .catch(err => alert("❌ خطأ: " + err.message));
         }
     </script>
-</body>
-</html>
+
 </body>
 </html>
