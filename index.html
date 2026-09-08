@@ -7,87 +7,36 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .auth-btn {
-            background: #46a0b2;
-            color: white;
-            border: none;
-            padding: 8px 22px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Tajawal', sans-serif;
-            box-shadow: 0 2px 8px rgba(70, 160, 178, 0.3);
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .auth-btn:hover {
-            background: #3a8a9a;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(70, 160, 178, 0.4);
-        }
-        .auth-btn-outline {
-            background: transparent;
-            color: #46a0b2;
-            border: 2px solid #46a0b2;
-            box-shadow: none;
-        }
-        .auth-btn-outline:hover {
-            background: #46a0b2;
-            color: white;
-        }
-        .auth-btn-logout {
-            background: transparent;
-            color: #dc3545;
-            border: 2px solid #dc3545;
-            box-shadow: none;
-        }
-        .auth-btn-logout:hover {
-            background: #dc3545;
-            color: white;
-        }
-        .auth-user {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #1a1a2e;
-            font-weight: bold;
-            font-size: 15px;
-        }
-        .auth-user .avatar {
-            background: #46a0b2;
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-        .header-auth {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        @media (max-width: 768px) {
-            header .container {
-                flex-direction: column;
-                gap: 12px;
-            }
-            .header-auth {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-        }
+        header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .auth-btn { background: #46a0b2; color: white; border: none; padding: 8px 22px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; font-family: 'Tajawal', sans-serif; box-shadow: 0 2px 8px rgba(70,160,178,0.3); display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+        .auth-btn:hover { background: #3a8a9a; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(70,160,178,0.4); }
+        .auth-btn-outline { background: transparent; color: #46a0b2; border: 2px solid #46a0b2; box-shadow: none; }
+        .auth-btn-outline:hover { background: #46a0b2; color: white; }
+        .auth-btn-logout { background: transparent; color: #dc3545; border: 2px solid #dc3545; box-shadow: none; }
+        .auth-btn-logout:hover { background: #dc3545; color: white; }
+        .auth-user { display: flex; align-items: center; gap: 8px; color: #1a1a2e; font-weight: bold; font-size: 15px; }
+        .auth-user .avatar { background: #46a0b2; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .header-auth { display: flex; align-items: center; gap: 10px; }
+        @media (max-width: 768px) { header .container { flex-direction: column; gap: 12px; } .header-auth { flex-wrap: wrap; justify-content: center; } }
+        .hero { background: linear-gradient(135deg, #46a0b2 0%, #2d7d8c 100%); color: white; padding: 80px 0; text-align: center; }
+        .hero h2 { font-size: 42px; margin-bottom: 15px; }
+        .hero h2 span { color: #ffe066; }
+        .hero p { font-size: 20px; margin-bottom: 30px; opacity: 0.9; }
+        .btn { display: inline-block; padding: 14px 35px; border-radius: 50px; font-weight: 700; text-decoration: none; transition: 0.3s; font-size: 18px; border: none; cursor: pointer; }
+        .btn-primary { background: #ffe066; color: #1a1a2e; }
+        .btn-primary:hover { background: #ffd633; transform: scale(1.05); }
+        .btn-secondary { background: rgba(255,255,255,0.2); color: white; border: 2px solid white; }
+        .btn-secondary:hover { background: rgba(255,255,255,0.3); }
+        .features { padding: 60px 0; background: white; }
+        .features h2 { text-align: center; font-size: 32px; margin-bottom: 40px; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center; }
+        .feature .icon { font-size: 40px; display: block; margin-bottom: 10px; }
+        .feature h3 { font-size: 20px; margin-bottom: 8px; }
+        .feature p { color: #666; }
+        footer { background: #1a1a2e; color: #aaa; padding: 30px 0; text-align: center; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        .social-links a { color: #aaa; text-decoration: none; margin: 0 10px; transition: 0.3s; }
+        .social-links a:hover { color: white; }
     </style>
 </head>
 <body>
@@ -151,6 +100,12 @@
                 <a href="https://www.facebook.com" target="_blank">📘 فيسبوك</a>
                 <a href="mailto:ashams5850@gmail.com">📧 بريد</a>
             </div>
+            <div style="margin-top:10px; font-size:14px; color:#888;">
+                👁️ عدد الزوار:
+                <a href="https://visitorbadge.io/status?path=ashams5850.smart-store">
+                    <img src="https://api.visitorbadge.io/api/visitors?path=ashams5850.smart-store&label=زوار&labelColor=%23697689&countColor=%2346a0b2" />
+                </a>
+            </div>
         </div>
     </footer>
 
@@ -168,64 +123,35 @@
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-        console.log("✅ Firebase initialized successfully!");
 
         function updateUI(user) {
             const section = document.getElementById('authSection');
             if (user) {
-                const email = user.email;
-                const shortEmail = email.length > 20 ? email.substring(0, 20) + '...' : email;
+                const displayName = user.displayName || user.email || 'مستخدم';
+                const shortName = displayName.length > 20 ? displayName.substring(0, 20) + '...' : displayName;
                 section.innerHTML = `
                     <div class="auth-user">
                         <span class="avatar">👤</span>
-                        <span>${shortEmail}</span>
+                        <span>${shortName}</span>
                     </div>
+                    <a href="dashboard.html" class="auth-btn" style="background:#46a0b2; color:white; padding:8px 22px; border-radius:8px; text-decoration:none;">📊 لوحة التحكم</a>
                     <button onclick="logout()" class="auth-btn auth-btn-logout">🚪 خروج</button>
                 `;
             } else {
                 section.innerHTML = `
-                    <button onclick="signup()" class="auth-btn">📝 تسجيل جديد</button>
-                    <button onclick="login()" class="auth-btn auth-btn-outline">🔐 دخول</button>
+                    <a href="signup.html" class="auth-btn">📝 تسجيل جديد</a>
+                    <a href="login.html" class="auth-btn auth-btn-outline">🔐 دخول</a>
                 `;
             }
         }
 
         auth.onAuthStateChanged(user => updateUI(user));
 
-        function signup() {
-            const email = prompt("📧 أدخل بريدك الإلكتروني:");
-            if (!email) return alert("❌ الرجاء إدخال البريد الإلكتروني");
-            const password = prompt("🔑 أدخل كلمة المرور (6 أحرف على الأقل):");
-            if (!password) return alert("❌ الرجاء إدخال كلمة المرور");
-            if (password.length < 6) return alert("❌ كلمة المرور لازم تكون 6 أحرف على الأقل!");
-            auth.createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    alert("✅ تم التسجيل بنجاح!");
-                    updateUI(userCredential.user);
-                })
-                .catch(err => alert("❌ خطأ: " + err.message));
-        }
-
-        function login() {
-            const email = prompt("📧 أدخل بريدك الإلكتروني:");
-            if (!email) return alert("❌ الرجاء إدخال البريد الإلكتروني");
-            const password = prompt("🔑 أدخل كلمة المرور:");
-            if (!password) return alert("❌ الرجاء إدخال كلمة المرور");
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    alert("✅ تم تسجيل الدخول!");
-                    updateUI(userCredential.user);
-                })
-                .catch(err => alert("❌ خطأ: " + err.message));
-        }
-
         function logout() {
-            auth.signOut()
-                .then(() => {
-                    alert("✅ تم تسجيل الخروج!");
-                    updateUI(null);
-                })
-                .catch(err => alert("❌ خطأ: " + err.message));
+            auth.signOut().then(() => {
+                alert('✅ تم تسجيل الخروج!');
+                window.location.href = 'index.html';
+            }).catch(err => alert('❌ خطأ: ' + err.message));
         }
     </script>
 </body>
