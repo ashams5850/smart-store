@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب - Smart Store</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; font-family: 'Tajawal', sans-serif; }
+        .signup-container { background: white; padding: 40px 35px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        .signup-container h2 { text-align: center; color: #1a1a2e; margin-bottom: 10px; font-size: 28px; }
+        .signup-container h2 span { color: #46a0b2; }
+        .signup-container p.sub { text-align: center; color: #888; margin-bottom: 25px; }
+        .signup-container input { width: 100%; padding: 14px 15px; margin-bottom: 15px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 16px; font-family: inherit; box-sizing: border-box; transition: 0.3s; }
+        .signup-container input:focus { border-color: #46a0b2; outline: none; box-shadow: 0 0 0 4px rgba(70,160,178,0.1); }
+        .signup-container button { width: 100%; padding: 15px; background: #46a0b2; color: white; border: none; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .signup-container button:hover { background: #3a8a9a; transform: scale(1.02); }
+        .signup-container .links { text-align: center; margin-top: 20px; }
+        .signup-container .links a { color: #46a0b2; text-decoration: none; font-weight: bold; }
+        .signup-container .links a:hover { text-decoration: underline; }
+        .signup-container .error-msg, .signup-container .success-msg { padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; display: none; }
+        .error-msg { background: #f8d7da; color: #721c24; }
+        .success-msg { background: #d4edda; color: #155724; }
+        .name-row { display: flex; gap: 10px; }
+        .name-row input { width: 50%; }
+        @media (max-width: 500px) { .name-row { flex-direction: column; } .name-row input { width: 100%; } }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h2>📝 <span>حساب جديد</span></h2>
+        <p class="sub">أنشئ حسابك في Smart Store</p>
+        <div id="errorMsg" class="error-msg"></div>
+        <div id="successMsg" class="success-msg"></div>
+        
+        <div class="name-row">
+            <input type="text" id="firstName" placeholder="👤 الاسم الأول" required>
+            <input type="text" id="lastName" placeholder="👤 اسم العائلة" required>
+        </div>
+        <input type="email" id="signupEmail" placeholder="📧 البريد الإلكتروني" required>
+        <input type="password" id="signupPassword" placeholder="🔑 كلمة المرور (6 أحرف على الأقل)" required>
+        
+        <button onclick="signupUser()">📝 إنشاء حساب</button>
+        <div class="links">لديك حساب؟ <a href="login.html">تسجيل الدخول</a></div>
+        <div class="links"><a href="index.html">⬅ العودة للرئيسية</a></div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDqOyFk7cauFKQw6h__E78LkSCiBHkgJSE",
+            authDomain: "smart-store-bc1e6.firebaseapp.com",
+            projectId: "smart-store-bc1e6",
+            storageBucket: "smart-store-bc1e6.firebasestorage.app",
+            messagingSenderId: "10224365969",
+            appId: "1:10224365969:web:2a2d0de608d0b7d329ea30",
+            measurementId: "G-ZW2P5Y8CPE"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        function showError(msg) { 
+            const el = document.getElementById('errorMsg'); 
+            el.textContent = msg; 
+            el.style.display = 'block'; 
+            setTimeout(() => el.style.display = 'none', 5000); 
+        }
+        function showSuccess(msg) { 
+            const el = document.getElementById('successMsg'); 
+            el.textContent = msg; 
+            el.style.display = 'block'; 
+            setTimeout(() => el.style.display = 'none', 3000); 
+        }
+
+        function signupUser() {
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value.trim();
+
+            if (!firstName || !lastName || !email || !password) {
+                showError('❌ الرجاء ملء جميع الحقول');
+                return;
+            }
+            if (password.length < 6) {
+                showError('❌ كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+                return;
+            }
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    return userCredential.user.updateProfile({
+                        displayName: firstName + ' ' + lastName
+                    });
+                })
+                .then(() => {
+                    showSuccess('✅ تم إنشاء الحساب بنجاح!');
+                    setTimeout(() => window.location.href = 'login.html', 1500);
+                })
+                .catch(err => showError('❌ ' + err.message));
+        }
+    </script>
+</body>
+</html>
