@@ -1,265 +1,150 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Store - كروت ذكية احترافية</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>الملف الشخصي - Smart Store</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet" />
     <style>
-        header .container {
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f0f2f5;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            flex-wrap: wrap;
-        }
-        .auth-btn {
-            background: #46a0b2;
-            color: white;
-            border: none;
-            padding: 8px 22px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            min-height: 100vh;
             font-family: 'Tajawal', sans-serif;
-            box-shadow: 0 2px 8px rgba(70,160,178,0.3);
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            text-decoration: none;
+            padding: 20px;
         }
-        .auth-btn:hover {
-            background: #3a8a9a;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(70,160,178,0.4);
+        .profile-container {
+            background: white;
+            padding: 40px 35px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
         }
-        .auth-btn-outline {
-            background: transparent;
-            color: #46a0b2;
-            border: 2px solid #46a0b2;
-            box-shadow: none;
+        .profile-container h2 { font-size: 28px; color: #1a1a2e; margin-bottom: 10px; }
+        .profile-container h2 span { color: #46a0b2; }
+        .profile-container .sub { color: #888; margin-bottom: 20px; }
+        .profile-container .avatar-wrapper {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 20px;
         }
-        .auth-btn-outline:hover {
+        .profile-container .avatar-wrapper img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #46a0b2;
+            background: #e9ecef;
+        }
+        .profile-container .avatar-wrapper .upload-btn {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
             background: #46a0b2;
             color: white;
-        }
-        .auth-btn-logout {
-            background: transparent;
-            color: #dc3545;
-            border: 2px solid #dc3545;
-            box-shadow: none;
-        }
-        .auth-btn-logout:hover {
-            background: #dc3545;
-            color: white;
-        }
-        .auth-user {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #1a1a2e;
-            font-weight: bold;
-            font-size: 15px;
-        }
-        .auth-user img {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            border: 2px solid #46a0b2;
-            object-fit: cover;
-        }
-        .header-auth {
             display: flex;
             align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            border: 2px solid white;
+            transition: 0.3s;
         }
-        @media (max-width: 768px) {
-            header .container {
-                flex-direction: column;
-                gap: 12px;
-            }
-            .header-auth {
-                justify-content: center;
-            }
+        .profile-container .avatar-wrapper .upload-btn:hover { background: #3a8a9a; transform: scale(1.05); }
+        .profile-container input[type="file"] { display: none; }
+        .profile-container .field { text-align: right; margin: 15px 0; }
+        .profile-container .field label { display: block; font-weight: 700; font-size: 14px; color: #333; margin-bottom: 5px; }
+        .profile-container .field input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: 0.3s;
         }
-        .hero {
+        .profile-container .field input:focus {
+            border-color: #46a0b2;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(70,160,178,0.1);
+        }
+        .profile-container .field input:disabled { background: #f8f9fa; color: #888; }
+        .profile-container .btn-save {
+            width: 100%;
+            padding: 14px;
             background: linear-gradient(135deg, #46a0b2 0%, #2d7d8c 100%);
             color: white;
-            padding: 80px 0;
-            text-align: center;
-        }
-        .hero h2 {
-            font-size: 42px;
-            margin-bottom: 15px;
-        }
-        .hero h2 span {
-            color: #ffe066;
-        }
-        .hero p {
-            font-size: 20px;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-        .btn {
-            display: inline-block;
-            padding: 14px 35px;
-            border-radius: 50px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: 0.3s;
-            font-size: 18px;
             border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
-        }
-        .btn-primary {
-            background: #ffe066;
-            color: #1a1a2e;
-        }
-        .btn-primary:hover {
-            background: #ffd633;
-            transform: scale(1.05);
-        }
-        .btn-secondary {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: 2px solid white;
-        }
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.3);
-        }
-        .features {
-            padding: 60px 0;
-            background: white;
-        }
-        .features h2 {
-            text-align: center;
-            font-size: 32px;
-            margin-bottom: 40px;
-        }
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            text-align: center;
-        }
-        .feature .icon {
-            font-size: 40px;
-            display: block;
-            margin-bottom: 10px;
-        }
-        .feature h3 {
-            font-size: 20px;
-            margin-bottom: 8px;
-        }
-        .feature p {
-            color: #666;
-        }
-        footer {
-            background: #1a1a2e;
-            color: #aaa;
-            padding: 30px 0;
-            text-align: center;
-        }
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        .social-links a {
-            color: #aaa;
-            text-decoration: none;
-            margin: 0 10px;
             transition: 0.3s;
-        }
-        .social-links a:hover {
-            color: white;
-        }
-        .visitor-badge {
             margin-top: 10px;
-            font-size: 14px;
-            color: #888;
+            box-shadow: 0 4px 15px rgba(70,160,178,0.3);
         }
-        .visitor-badge img {
-            vertical-align: middle;
+        .profile-container .btn-save:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(70,160,178,0.4); }
+        .profile-container .btn-save:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .profile-container .links { margin-top: 20px; }
+        .profile-container .links a { color: #46a0b2; text-decoration: none; font-weight: bold; }
+        .profile-container .links a:hover { text-decoration: underline; }
+        .toast {
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: none;
+            font-weight: bold;
         }
+        .toast-success { background: #d4edda; color: #155724; display: block; }
+        .toast-error { background: #f8d7da; color: #721c24; display: block; }
+        .toast-loading { background: #fff3cd; color: #856404; display: block; }
+        .spinner { display: inline-block; width: 16px; height: 16px; border: 3px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin 0.8s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
+    <div class="profile-container">
+        <h2>👤 <span>الملف الشخصي</span></h2>
+        <p class="sub">عدل بياناتك الشخصية</p>
 
-    <header>
-        <div class="container">
-            <h1>🛍️ Smart Store</h1>
-            <nav>
-                <a href="index.html">الرئيسية</a>
-                <a href="products.html">الباقات</a>
-                <a href="contact.html">تواصل معنا</a>
-            </nav>
-            <div class="header-auth" id="authSection"></div>
+        <div id="toastMessage" class="toast"></div>
+
+        <div class="avatar-wrapper">
+            <img id="profileImage" src="https://ui-avatars.com/api/?name=User&background=46a0b2&color=fff&size=128" alt="صورة الملف الشخصي" />
+            <label class="upload-btn" for="fileInput" id="uploadLabel">📷</label>
+            <input type="file" id="fileInput" accept="image/*" />
         </div>
-    </header>
 
-    <section class="hero">
-        <div class="container">
-            <h2>📱 هويتك الرقمية في <span>كارت ذكي</span></h2>
-            <p>شارك بياناتك، موقعك، وتقييماتك بلمسة واحدة</p>
-            <div class="hero-buttons">
-                <a href="products.html" class="btn btn-primary">🚀 اطلب الآن</a>
-                <a href="#features" class="btn btn-secondary">تعرف على المزيد</a>
-            </div>
+        <div class="field">
+            <label>👤 الاسم الكامل</label>
+            <input type="text" id="displayName" placeholder="أدخل اسمك الكامل" />
         </div>
-    </section>
 
-    <section id="features" class="features">
-        <div class="container">
-            <h2>✨ مميزات الكارت الذكي</h2>
-            <div class="features-grid">
-                <div class="feature">
-                    <span class="icon">📇</span>
-                    <h3>كارت ذكي</h3>
-                    <p>كارت إلكتروني يحوي كل بياناتك المهنية</p>
-                </div>
-                <div class="feature">
-                    <span class="icon">📱</span>
-                    <h3>QR Code</h3>
-                    <p>يمسح العميل الكود ويوصل لك فوراً</p>
-                </div>
-                <div class="feature">
-                    <span class="icon">⭐</span>
-                    <h3>Google Review</h3>
-                    <p>يوجه العميل مباشرة لتقييمك على جوجل</p>
-                </div>
-                <div class="feature">
-                    <span class="icon">💬</span>
-                    <h3>WhatsApp</h3>
-                    <p>يتواصل معك العميل بضغطة واحدة</p>
-                </div>
-            </div>
+        <div class="field">
+            <label>📧 البريد الإلكتروني</label>
+            <input type="email" id="email" disabled />
         </div>
-    </section>
 
-    <footer>
-        <div class="container">
-            <p>Smart Store &copy; 2026 - الفيوم، مصر</p>
-            <div class="social-links">
-                <a href="https://wa.me/201012899046" target="_blank">📱 واتساب</a>
-                <a href="https://www.facebook.com" target="_blank">📘 فيسبوك</a>
-                <a href="mailto:ashams5850@gmail.com">📧 بريد</a>
-            </div>
-            <div class="visitor-badge">
-                👁️ عدد الزوار:
-                <a href="https://visitorbadge.io/status?path=ashams5850.smart-store" target="_blank">
-                    <img src="https://api.visitorbadge.io/api/visitors?path=ashams5850.smart-store&label=زوار&labelColor=%23697689&countColor=%2346a0b2" alt="عداد الزوار" />
-                </a>
-            </div>
+        <button class="btn-save" id="saveBtn" onclick="updateProfile()">💾 حفظ التغييرات</button>
+
+        <div class="links">
+            <a href="dashboard.html">⬅ العودة للوحة التحكم</a>
         </div>
-    </footer>
+    </div>
 
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 
     <script>
         const firebaseConfig = {
@@ -273,44 +158,159 @@
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+        const storage = firebase.storage();
 
-        // ✅ دالة تحديث الواجهة (مع الصورة الشخصية وكل الأزرار)
-        function updateUI(user) {
-            const section = document.getElementById('authSection');
-            if (user) {
-                const displayName = user.displayName || user.email || 'مستخدم';
-                const shortName = displayName.length > 20 ? displayName.substring(0, 20) + '...' : displayName;
-                const photo = user.photoURL ? user.photoURL : `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=46a0b2&color=fff&size=64`;
+        let currentUser = null;
 
-                section.innerHTML = `
-                    <div class="auth-user">
-                        <img src="${photo}" alt="صورة الملف الشخصي" />
-                        <span>${shortName}</span>
-                    </div>
-                    <a href="profile.html" class="auth-btn" style="background:#46a0b2; color:white; padding:8px 22px; border-radius:8px; text-decoration:none; margin:0 5px;">👤 ملفي الشخصي</a>
-                    <a href="dashboard.html" class="auth-btn" style="background:#46a0b2; color:white; padding:8px 22px; border-radius:8px; text-decoration:none; margin:0 5px;">📊 لوحة التحكم</a>
-                    <button onclick="logout()" class="auth-btn auth-btn-logout" style="margin:0 5px;">🚪 خروج</button>
-                `;
+        function showToast(msg, type = 'success') {
+            const el = document.getElementById('toastMessage');
+            el.textContent = msg;
+            el.className = 'toast toast-' + type;
+            el.style.display = 'block';
+            clearTimeout(el._hideTimer);
+            el._hideTimer = setTimeout(() => { el.style.display = 'none'; }, 4000);
+        }
+
+        // دالة تحميل بيانات المستخدم (مع دعم الصورة من Firebase)
+        function loadUserData(user) {
+            if (!user) return;
+            currentUser = user;
+            document.getElementById('displayName').value = user.displayName || '';
+            document.getElementById('email').value = user.email || '';
+            
+            // تحديث الصورة
+            const img = document.getElementById('profileImage');
+            if (user.photoURL) {
+                img.src = user.photoURL;
             } else {
-                section.innerHTML = `
-                    <a href="signup.html" class="auth-btn">📝 تسجيل جديد</a>
-                    <a href="login.html" class="auth-btn auth-btn-outline">🔐 دخول</a>
-                `;
+                const name = user.displayName || 'User';
+                img.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=46a0b2&color=fff&size=128`;
             }
         }
 
-        // مراقبة حالة المستخدم (تحديث تلقائي عند تسجيل الدخول/الخروج)
-        auth.onAuthStateChanged(user => updateUI(user));
+        // مراقبة المستخدم
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                loadUserData(user);
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
 
-        // دالة تسجيل الخروج
-        function logout() {
-            auth.signOut()
-                .then(() => {
-                    alert('✅ تم تسجيل الخروج بنجاح!');
-                    window.location.href = 'index.html';
-                })
-                .catch(err => alert('❌ خطأ: ' + err.message));
+        // ========== رفع الصورة ==========
+        document.getElementById('fileInput').addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('❌ حجم الصورة كبير جداً (الحد الأقصى 5 ميجابايت)', 'error');
+                this.value = '';
+                return;
+            }
+            if (!file.type.startsWith('image/')) {
+                showToast('❌ الرجاء اختيار ملف صورة صحيح (JPG, PNG, GIF)', 'error');
+                this.value = '';
+                return;
+            }
+
+            const user = auth.currentUser;
+            if (!user) {
+                showToast('❌ الرجاء تسجيل الدخول أولاً', 'error');
+                return;
+            }
+
+            // عرض الصورة مؤقتاً
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                document.getElementById('profileImage').src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            const label = document.getElementById('uploadLabel');
+            label.style.opacity = '0.5';
+            label.style.cursor = 'not-allowed';
+            showToast('⏳ جاري رفع الصورة...', 'loading');
+
+            try {
+                const storageRef = storage.ref('profile_pics/' + user.uid + '.jpg');
+                await storageRef.put(file);
+                const downloadURL = await storageRef.getDownloadURL();
+
+                // ✅ 1. تحديث حساب المستخدم
+                await user.updateProfile({ photoURL: downloadURL });
+
+                // ✅ 2. إعادة تحميل المستخدم من الخادم
+                await user.reload();
+
+                // ✅ 3. جلب المستخدم المحدث
+                const updatedUser = auth.currentUser;
+
+                // ✅ 4. حفظ الصورة في localStorage كحل بديل (لو فشل reload)
+                if (updatedUser.photoURL) {
+                    localStorage.setItem('userPhotoURL', updatedUser.photoURL);
+                }
+
+                // ✅ 5. تحديث الواجهة
+                loadUserData(updatedUser);
+                
+                showToast('✅ تم تحديث الصورة الشخصية بنجاح!', 'success');
+            } catch (error) {
+                console.error('❌ خطأ في رفع الصورة:', error);
+                showToast('❌ فشل رفع الصورة: ' + error.message, 'error');
+                // إعادة الصورة القديمة
+                loadUserData(user);
+                // لو فشل، جرب الصورة من localStorage
+                const savedPhoto = localStorage.getItem('userPhotoURL');
+                if (savedPhoto) {
+                    document.getElementById('profileImage').src = savedPhoto;
+                }
+            } finally {
+                label.style.opacity = '1';
+                label.style.cursor = 'pointer';
+                this.value = '';
+            }
+        });
+
+        // ========== تحديث الاسم ==========
+        async function updateProfile() {
+            const newName = document.getElementById('displayName').value.trim();
+            if (!newName) {
+                showToast('❌ الرجاء إدخال اسم صحيح', 'error');
+                return;
+            }
+
+            const user = auth.currentUser;
+            if (!user) {
+                showToast('❌ الرجاء تسجيل الدخول أولاً', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('saveBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ جاري الحفظ...';
+            
+            try {
+                await user.updateProfile({ displayName: newName });
+                await user.reload();
+                const updatedUser = auth.currentUser;
+                loadUserData(updatedUser);
+                showToast('✅ تم تحديث الاسم بنجاح!', 'success');
+            } catch (error) {
+                console.error('❌ خطأ في تحديث الاسم:', error);
+                showToast('❌ خطأ: ' + error.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '💾 حفظ التغييرات';
+            }
         }
+
+        // عند تحميل الصفحة، استخدم الصورة من localStorage لو موجودة
+        window.addEventListener('load', function() {
+            const savedPhoto = localStorage.getItem('userPhotoURL');
+            if (savedPhoto) {
+                document.getElementById('profileImage').src = savedPhoto;
+            }
+        });
     </script>
 </body>
 </html>
