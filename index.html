@@ -63,16 +63,12 @@
             font-weight: bold;
             font-size: 15px;
         }
-        .auth-user .avatar {
-            background: #46a0b2;
-            color: white;
+        .auth-user img {
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
+            border: 2px solid #46a0b2;
+            object-fit: cover;
         }
         .header-auth {
             display: flex;
@@ -181,6 +177,14 @@
         .social-links a:hover {
             color: white;
         }
+        .visitor-badge {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #888;
+        }
+        .visitor-badge img {
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -244,10 +248,10 @@
                 <a href="https://www.facebook.com" target="_blank">📘 فيسبوك</a>
                 <a href="mailto:ashams5850@gmail.com">📧 بريد</a>
             </div>
-            <div style="margin-top:10px; font-size:14px; color:#888;">
+            <div class="visitor-badge">
                 👁️ عدد الزوار:
-                <a href="https://visitorbadge.io/status?path=ashams5850.smart-store">
-                    <img src="https://api.visitorbadge.io/api/visitors?path=ashams5850.smart-store&label=زوار&labelColor=%23697689&countColor=%2346a0b2" />
+                <a href="https://visitorbadge.io/status?path=ashams5850.smart-store" target="_blank">
+                    <img src="https://api.visitorbadge.io/api/visitors?path=ashams5850.smart-store&label=زوار&labelColor=%23697689&countColor=%2346a0b2" alt="عداد الزوار" />
                 </a>
             </div>
         </div>
@@ -270,15 +274,17 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        // ✅ دالة تحديث الواجهة (مع زر الملف الشخصي)
+        // ✅ دالة تحديث الواجهة (مع الصورة الشخصية وكل الأزرار)
         function updateUI(user) {
             const section = document.getElementById('authSection');
             if (user) {
                 const displayName = user.displayName || user.email || 'مستخدم';
                 const shortName = displayName.length > 20 ? displayName.substring(0, 20) + '...' : displayName;
+                const photo = user.photoURL ? user.photoURL : `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=46a0b2&color=fff&size=64`;
+
                 section.innerHTML = `
                     <div class="auth-user">
-                        <span class="avatar">👤</span>
+                        <img src="${photo}" alt="صورة الملف الشخصي" />
                         <span>${shortName}</span>
                     </div>
                     <a href="profile.html" class="auth-btn" style="background:#46a0b2; color:white; padding:8px 22px; border-radius:8px; text-decoration:none; margin:0 5px;">👤 ملفي الشخصي</a>
@@ -293,7 +299,7 @@
             }
         }
 
-        // مراقبة حالة المستخدم
+        // مراقبة حالة المستخدم (تحديث تلقائي عند تسجيل الدخول/الخروج)
         auth.onAuthStateChanged(user => updateUI(user));
 
         // دالة تسجيل الخروج
