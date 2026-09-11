@@ -3,141 +3,73 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>الملف الشخصي - Smart Store</title>
+    <title>لوحة تحكم الأدمن - Smart Store</title>
     <link rel="stylesheet" href="style.css" />
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-family: 'Tajawal', sans-serif;
-            padding: 20px;
-        }
-        .profile-container {
-            background: white;
-            padding: 40px 35px;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            width: 100%;
-            max-width: 450px;
-            text-align: center;
-        }
-        .profile-container h2 { font-size: 28px; color: #1a1a2e; margin-bottom: 10px; }
-        .profile-container h2 span { color: #46a0b2; }
-        .profile-container .sub { color: #888; margin-bottom: 20px; }
-        .profile-container .avatar-wrapper {
-            position: relative;
-            width: 130px;
-            height: 130px;
-            margin: 0 auto 20px;
-        }
-        .profile-container .avatar-wrapper img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid #46a0b2;
-            background: #e9ecef;
-        }
-        .profile-container .avatar-wrapper .upload-btn {
-            position: absolute;
-            bottom: 4px;
-            right: 4px;
-            background: #46a0b2;
-            color: white;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            cursor: pointer;
-            border: 2px solid white;
-            transition: 0.3s;
-        }
-        .profile-container .avatar-wrapper .upload-btn:hover { background: #3a8a9a; transform: scale(1.05); }
-        .profile-container input[type="file"] { display: none; }
-        .profile-container .field { text-align: right; margin: 15px 0; }
-        .profile-container .field label { display: block; font-weight: 700; font-size: 14px; color: #333; margin-bottom: 5px; }
-        .profile-container .field input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 16px;
-            font-family: inherit;
-            transition: 0.3s;
-        }
-        .profile-container .field input:focus {
-            border-color: #46a0b2;
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(70,160,178,0.1);
-        }
-        .profile-container .field input:disabled { background: #f8f9fa; color: #888; }
-        .profile-container .btn-save {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #46a0b2 0%, #2d7d8c 100%);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(70,160,178,0.3);
-        }
-        .profile-container .btn-save:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(70,160,178,0.4); }
-        .profile-container .btn-save:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-        .profile-container .links { margin-top: 20px; }
-        .profile-container .links a { color: #46a0b2; text-decoration: none; font-weight: bold; }
-        .profile-container .links a:hover { text-decoration: underline; }
-        .toast {
-            padding: 12px 20px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            display: none;
-            font-weight: bold;
-        }
+        body { font-family: 'Tajawal', sans-serif; background: #f0f2f5; padding: 30px 20px; }
+        .admin-container { max-width: 1100px; margin: 0 auto; background: white; padding: 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .admin-container h1 { color: #1a1a2e; font-size: 30px; margin-bottom: 8px; }
+        .admin-container h1 span { color: #46a0b2; }
+        .admin-container .sub { color: #888; margin-bottom: 25px; }
+        .stats { display: flex; gap: 20px; margin-bottom: 30px; flex-wrap: wrap; }
+        .stat-card { background: #f8f9fa; padding: 18px 25px; border-radius: 14px; flex: 1; min-width: 150px; text-align: center; border-right: 5px solid #46a0b2; }
+        .stat-card h3 { margin: 0; font-size: 14px; color: #888; }
+        .stat-card p { margin: 8px 0 0; font-size: 26px; font-weight: bold; color: #1a1a2e; }
+        .admin-container table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .admin-container th { background: #46a0b2; color: white; padding: 12px; text-align: center; }
+        .admin-container td { padding: 12px; border-bottom: 1px solid #eee; text-align: center; }
+        .admin-container td img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #46a0b2; vertical-align: middle; }
+        .btn { padding: 6px 16px; border: none; border-radius: 30px; font-weight: bold; cursor: pointer; transition: 0.3s; font-family: 'Tajawal', sans-serif; font-size: 13px; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-danger:hover { background: #c82333; }
+        .btn-warning { background: #ffc107; color: #1a1a2e; }
+        .btn-warning:hover { background: #e0a800; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-success:hover { background: #218838; }
+        .links { margin-top: 25px; text-align: center; }
+        .links a { color: #46a0b2; text-decoration: none; font-weight: bold; margin: 0 10px; }
+        .links a:hover { text-decoration: underline; }
+        .toast { padding: 12px 20px; border-radius: 12px; margin-bottom: 20px; display: none; font-weight: bold; text-align: center; }
         .toast-success { background: #d4edda; color: #155724; display: block; }
         .toast-error { background: #f8d7da; color: #721c24; display: block; }
-        .toast-loading { background: #fff3cd; color: #856404; display: block; }
+        .loading { text-align: center; color: #888; padding: 20px; }
+        .rank-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; color: white; display: inline-block; }
+        .rank-admin { background: #dc3545; }
+        .rank-moderator { background: #6f42c1; }
+        .rank-star { background: #fd7e14; }
+        .rank-active { background: #28a745; }
+        .rank-new { background: #6c757d; }
+        .rank-select { padding: 6px 10px; border-radius: 8px; border: 2px solid #46a0b2; font-family: 'Tajawal', sans-serif; font-size: 13px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="profile-container">
-        <h2>👤 <span>الملف الشخصي</span></h2>
-        <p class="sub">عدل بياناتك الشخصية</p>
+    <div class="admin-container">
+        <h1>👑 <span>لوحة تحكم الأدمن</span></h1>
+        <p class="sub">إدارة المستخدمين والصلاحيات والرتب</p>
+
         <div id="toastMessage" class="toast"></div>
 
-        <div class="avatar-wrapper">
-            <img id="profileImage" src="https://ui-avatars.com/api/?name=User&background=46a0b2&color=fff&size=128" alt="صورة الملف الشخصي" />
-            <label class="upload-btn" for="fileInput" id="uploadLabel">📷</label>
-            <input type="file" id="fileInput" accept="image/*" />
+        <div class="stats">
+            <div class="stat-card"><h3>👤 عدد المستخدمين</h3><p id="usersCount">0</p></div>
+            <div class="stat-card"><h3>👑 عدد الأدمن</h3><p id="adminsCount">0</p></div>
+            <div class="stat-card"><h3>🛡️ عدد المشرفين</h3><p id="modsCount">0</p></div>
         </div>
 
-        <div class="field">
-            <label>👤 الاسم الكامل</label>
-            <input type="text" id="displayName" placeholder="أدخل اسمك الكامل" />
-        </div>
-        <div class="field">
-            <label>📧 البريد الإلكتروني</label>
-            <input type="email" id="email" disabled />
-        </div>
+        <h3>📋 قائمة المستخدمين</h3>
+        <div id="usersList"><p class="loading">جاري تحميل المستخدمين...</p></div>
 
-        <button class="btn-save" id="saveBtn" onclick="updateProfile()">💾 حفظ التغييرات</button>
-        <div class="links"><a href="dashboard.html">⬅ العودة للوحة التحكم</a></div>
+        <div class="links">
+            <a href="dashboard.html">⬅ العودة للوحة التحكم</a>
+            <a href="index.html">🏠 الرئيسية</a>
+        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyDqOyFk7cauFKQw6h__E78LkSCiBHkgJSE",
@@ -150,9 +82,7 @@
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-        const storage = firebase.storage();
-
-        let currentUser = null;
+        const db = firebase.firestore();
 
         function showToast(msg, type = 'success') {
             const el = document.getElementById('toastMessage');
@@ -163,145 +93,100 @@
             el._hideTimer = setTimeout(() => { el.style.display = 'none'; }, 4000);
         }
 
-        // تحديث الصورة في localStorage والواجهة
-        function updateProfileImage(src) {
-            const img = document.getElementById('profileImage');
-            if (src) {
-                img.src = src;
-                localStorage.setItem('userPhotoURL', src);
-            } else {
-                const name = currentUser?.displayName || 'User';
-                img.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=46a0b2&color=fff&size=128`;
-                localStorage.removeItem('userPhotoURL');
-            }
-        }
-
-        function loadUserData(user) {
-            if (!user) return;
-            currentUser = user;
-            document.getElementById('displayName').value = user.displayName || '';
-            document.getElementById('email').value = user.email || '';
-
-            // الصورة من localStorage أولاً
-            const savedPhoto = localStorage.getItem('userPhotoURL');
-            if (savedPhoto) {
-                document.getElementById('profileImage').src = savedPhoto;
-            } else if (user.photoURL) {
-                document.getElementById('profileImage').src = user.photoURL;
-                localStorage.setItem('userPhotoURL', user.photoURL);
-            } else {
-                const name = user.displayName || 'User';
-                document.getElementById('profileImage').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=46a0b2&color=fff&size=128`;
-            }
-        }
-
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                loadUserData(user);
-            } else {
-                window.location.href = 'login.html';
-            }
-        });
-
-        // ===== رفع الصورة =====
-        document.getElementById('fileInput').addEventListener('change', async function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            if (file.size > 5 * 1024 * 1024) {
-                showToast('❌ حجم الصورة كبير جداً (الحد الأقصى 5 ميجابايت)', 'error');
-                this.value = '';
-                return;
-            }
-            if (!file.type.startsWith('image/')) {
-                showToast('❌ الرجاء اختيار ملف صورة صحيح', 'error');
-                this.value = '';
-                return;
-            }
-
-            const user = auth.currentUser;
-            if (!user) {
-                showToast('❌ الرجاء تسجيل الدخول أولاً', 'error');
-                return;
-            }
-
-            // عرض فوري في الواجهة و localStorage
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const imgSrc = event.target.result;
-                document.getElementById('profileImage').src = imgSrc;
-                localStorage.setItem('userPhotoURL', imgSrc);
-            };
-            reader.readAsDataURL(file);
-
-            const label = document.getElementById('uploadLabel');
-            label.style.opacity = '0.5';
-            label.style.cursor = 'not-allowed';
-            showToast('⏳ جاري رفع الصورة...', 'loading');
-
+        auth.onAuthStateChanged(async user => {
+            if (!user) { window.location.href = 'login.html'; return; }
             try {
-                const storageRef = storage.ref('profile_pics/' + user.uid + '.jpg');
-                await storageRef.put(file);
-                const downloadURL = await storageRef.getDownloadURL();
-
-                await user.updateProfile({ photoURL: downloadURL });
-                await user.reload();
-                const updatedUser = auth.currentUser;
-
-                if (updatedUser.photoURL) {
-                    localStorage.setItem('userPhotoURL', updatedUser.photoURL);
-                    document.getElementById('profileImage').src = updatedUser.photoURL;
+                const doc = await db.collection('users').doc(user.uid).get();
+                const data = doc.exists ? doc.data() : {};
+                if (data.role !== 'admin' && data.rank !== 'admin') {
+                    showToast('❌ ليس لديك صلاحيات الأدمن!', 'error');
+                    setTimeout(() => window.location.href = 'index.html', 1500);
+                    return;
                 }
-                showToast('✅ تم تحديث الصورة الشخصية بنجاح!', 'success');
-            } catch (error) {
-                console.error('❌ خطأ في رفع الصورة:', error);
-                showToast('❌ فشل رفع الصورة: ' + error.message, 'error');
-                // إعادة الصورة من localStorage
-                const saved = localStorage.getItem('userPhotoURL');
-                if (saved) document.getElementById('profileImage').src = saved;
-            } finally {
-                label.style.opacity = '1';
-                label.style.cursor = 'pointer';
-                this.value = '';
+                loadUsers();
+            } catch (err) {
+                showToast('❌ خطأ: ' + err.message, 'error');
             }
         });
 
-        // ===== تحديث الاسم =====
-        async function updateProfile() {
-            const newName = document.getElementById('displayName').value.trim();
-            if (!newName) {
-                showToast('❌ الرجاء إدخال اسم صحيح', 'error');
-                return;
-            }
-            const user = auth.currentUser;
-            if (!user) {
-                showToast('❌ الرجاء تسجيل الدخول أولاً', 'error');
-                return;
-            }
+        function loadUsers() {
+            db.collection('users').get().then(snapshot => {
+                let html = `<table><tr>
+                    <th>الصورة</th>
+                    <th>البريد الإلكتروني</th>
+                    <th>الرتبة</th>
+                    <th>تغيير الرتبة</th>
+                    <th>إجراءات</th>
+                </tr>`;
+                let usersCount = 0, adminsCount = 0, modsCount = 0;
 
-            const btn = document.getElementById('saveBtn');
-            btn.disabled = true;
-            btn.textContent = '⏳ جاري الحفظ...';
-            try {
-                await user.updateProfile({ displayName: newName });
-                await user.reload();
-                const updatedUser = auth.currentUser;
-                loadUserData(updatedUser);
-                showToast('✅ تم تحديث الاسم بنجاح!', 'success');
-            } catch (error) {
-                showToast('❌ خطأ: ' + error.message, 'error');
-            } finally {
-                btn.disabled = false;
-                btn.textContent = '💾 حفظ التغييرات';
+                if (snapshot.empty) {
+                    html += `<tr><td colspan="5">لا يوجد مستخدمين</td></tr>`;
+                } else {
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        const role = data.role || 'user';
+                        const rank = data.rank || 'new';
+                        usersCount++;
+                        if (role === 'admin' || rank === 'admin') adminsCount++;
+                        if (rank === 'moderator') modsCount++;
+
+                        const photo = data.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.email || 'U')}&background=46a0b2&color=fff&size=64`;
+
+                        const rankMap = {
+                            'admin': { text: '👑 مدير', class: 'rank-admin' },
+                            'moderator': { text: '🛡️ مشرف', class: 'rank-moderator' },
+                            'star': { text: '⭐ عضو متألق', class: 'rank-star' },
+                            'active': { text: '🔥 عضو فعال', class: 'rank-active' },
+                            'new': { text: '🌱 عضو جديد', class: 'rank-new' }
+                        };
+                        const r = rankMap[rank] || rankMap['new'];
+
+                        html += `<tr>
+                            <td><img src="${photo}" alt="user" /></td>
+                            <td>${data.email || 'غير معروف'}</td>
+                            <td><span class="rank-badge ${r.class}">${r.text}</span></td>
+                            <td>
+                                <select class="rank-select" onchange="changeRank('${doc.id}', this.value)">
+                                    <option value="new" ${rank === 'new' ? 'selected' : ''}>🌱 عضو جديد</option>
+                                    <option value="active" ${rank === 'active' ? 'selected' : ''}>🔥 عضو فعال</option>
+                                    <option value="star" ${rank === 'star' ? 'selected' : ''}>⭐ عضو متألق</option>
+                                    <option value="moderator" ${rank === 'moderator' ? 'selected' : ''}>🛡️ مشرف</option>
+                                    <option value="admin" ${rank === 'admin' ? 'selected' : ''}>👑 مدير</option>
+                                </select>
+                            </td>
+                            <td>
+                                ${(role !== 'admin' && rank !== 'admin') ? `<button class="btn btn-danger" onclick="deleteUser('${doc.id}')">🗑️ حذف</button>` : ''}
+                            </td>
+                        </tr>`;
+                    });
+                }
+                html += `</table>`;
+                document.getElementById('usersList').innerHTML = html;
+                document.getElementById('usersCount').textContent = usersCount;
+                document.getElementById('adminsCount').textContent = adminsCount;
+                document.getElementById('modsCount').textContent = modsCount;
+            }).catch(err => {
+                document.getElementById('usersList').innerHTML = `<p class="loading">❌ خطأ: ${err.message}</p>`;
+            });
+        }
+
+        function deleteUser(uid) {
+            if (confirm('⚠️ هل أنت متأكد من حذف هذا المستخدم نهائياً؟')) {
+                db.collection('users').doc(uid).delete()
+                    .then(() => { showToast('✅ تم حذف المستخدم بنجاح', 'success'); loadUsers(); })
+                    .catch(err => showToast('❌ خطأ: ' + err.message, 'error'));
             }
         }
 
-        // عند تحميل الصفحة، استخدم الصورة من localStorage
-        window.addEventListener('load', function() {
-            const saved = localStorage.getItem('userPhotoURL');
-            if (saved) {
-                document.getElementById('profileImage').src = saved;
-            }
-        });
+        function changeRank(uid, newRank) {
+            db.collection('users').doc(uid).update({ rank: newRank })
+                .then(() => {
+                    showToast('✅ تم تغيير الرتبة بنجاح', 'success');
+                    loadUsers();
+                })
+                .catch(err => showToast('❌ خطأ: ' + err.message, 'error'));
+        }
     </script>
 </body>
 </html>
