@@ -102,11 +102,12 @@
                     return user.updateProfile({
                         displayName: firstName + ' ' + lastName
                     }).then(() => {
-                        // ✅ إضافة المستخدم إلى Firestore
+                        // ✅ إضافة المستخدم إلى Firestore مع الرتبة الافتراضية
                         return db.collection('users').doc(user.uid).set({
                             email: email,
                             displayName: firstName + ' ' + lastName,
                             role: 'user',
+                            rank: 'new',
                             createdAt: firebase.firestore.FieldValue.serverTimestamp()
                         });
                     });
