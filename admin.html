@@ -20,29 +20,41 @@
         .admin-container table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .admin-container th { background: #46a0b2; color: white; padding: 12px; text-align: center; }
         .admin-container td { padding: 12px; border-bottom: 1px solid #eee; text-align: center; }
-        .admin-container td img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid #46a0b2; vertical-align: middle; }
-        .btn { padding: 6px 16px; border: none; border-radius: 30px; font-weight: bold; cursor: pointer; transition: 0.3s; font-family: 'Tajawal', sans-serif; font-size: 14px; }
+        .admin-container td img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #46a0b2; vertical-align: middle; }
+        .btn { padding: 6px 16px; border: none; border-radius: 30px; font-weight: bold; cursor: pointer; transition: 0.3s; font-family: 'Tajawal', sans-serif; font-size: 13px; }
         .btn-danger { background: #dc3545; color: white; }
+        .btn-danger:hover { background: #c82333; }
         .btn-warning { background: #ffc107; color: #1a1a2e; }
+        .btn-warning:hover { background: #e0a800; }
         .btn-success { background: #28a745; color: white; }
+        .btn-success:hover { background: #218838; }
         .links { margin-top: 25px; text-align: center; }
         .links a { color: #46a0b2; text-decoration: none; font-weight: bold; margin: 0 10px; }
+        .links a:hover { text-decoration: underline; }
         .toast { padding: 12px 20px; border-radius: 12px; margin-bottom: 20px; display: none; font-weight: bold; text-align: center; }
         .toast-success { background: #d4edda; color: #155724; display: block; }
         .toast-error { background: #f8d7da; color: #721c24; display: block; }
         .loading { text-align: center; color: #888; padding: 20px; }
+        .rank-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; color: white; display: inline-block; }
+        .rank-admin { background: #dc3545; }
+        .rank-moderator { background: #6f42c1; }
+        .rank-star { background: #fd7e14; }
+        .rank-active { background: #28a745; }
+        .rank-new { background: #6c757d; }
+        .rank-select { padding: 6px 10px; border-radius: 8px; border: 2px solid #46a0b2; font-family: 'Tajawal', sans-serif; font-size: 13px; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="admin-container">
         <h1>👑 <span>لوحة تحكم الأدمن</span></h1>
-        <p class="sub">إدارة المستخدمين والصلاحيات</p>
+        <p class="sub">إدارة المستخدمين والصلاحيات والرتب</p>
 
         <div id="toastMessage" class="toast"></div>
 
         <div class="stats">
             <div class="stat-card"><h3>👤 عدد المستخدمين</h3><p id="usersCount">0</p></div>
             <div class="stat-card"><h3>👑 عدد الأدمن</h3><p id="adminsCount">0</p></div>
+            <div class="stat-card"><h3>🛡️ عدد المشرفين</h3><p id="modsCount">0</p></div>
         </div>
 
         <h3>📋 قائمة المستخدمين</h3>
@@ -85,7 +97,8 @@
             if (!user) { window.location.href = 'login.html'; return; }
             try {
                 const doc = await db.collection('users').doc(user.uid).get();
-                if (!doc.exists || doc.data().role !== 'admin') {
+                const data = doc.exists ? doc.data() : {};
+                if (data.role !== 'admin' && data.rank !== 'admin') {
                     showToast('❌ ليس لديك صلاحيات الأدمن!', 'error');
                     setTimeout(() => window.location.href = 'index.html', 1500);
                     return;
@@ -98,22 +111,52 @@
 
         function loadUsers() {
             db.collection('users').get().then(snapshot => {
-                let html = `<table><tr><th>البريد الإلكتروني</th><th>الدور</th><th>إجراءات</th></tr>`;
-                let usersCount = 0, adminsCount = 0;
+                let html = `<table><tr>
+                    <th>الصورة</th>
+                    <th>البريد الإلكتروني</th>
+                    <th>الرتبة</th>
+                    <th>تغيير الرتبة</th>
+                    <th>إجراءات</th>
+                </tr>`;
+                let usersCount = 0, adminsCount = 0, modsCount = 0;
+
                 if (snapshot.empty) {
-                    html += `<tr><td colspan="3">لا يوجد مستخدمين</td></tr>`;
+                    html += `<tr><td colspan="5">لا يوجد مستخدمين</td></tr>`;
                 } else {
                     snapshot.forEach(doc => {
                         const data = doc.data();
                         const role = data.role || 'user';
+                        const rank = data.rank || 'new';
                         usersCount++;
-                        if (role === 'admin') adminsCount++;
+                        if (role === 'admin' || rank === 'admin') adminsCount++;
+                        if (rank === 'moderator') modsCount++;
+
+                        const photo = data.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.email || 'U')}&background=46a0b2&color=fff&size=64`;
+
+                        const rankMap = {
+                            'admin': { text: '👑 مدير', class: 'rank-admin' },
+                            'moderator': { text: '🛡️ مشرف', class: 'rank-moderator' },
+                            'star': { text: '⭐ عضو متألق', class: 'rank-star' },
+                            'active': { text: '🔥 عضو فعال', class: 'rank-active' },
+                            'new': { text: '🌱 عضو جديد', class: 'rank-new' }
+                        };
+                        const r = rankMap[rank] || rankMap['new'];
+
                         html += `<tr>
+                            <td><img src="${photo}" alt="user" /></td>
                             <td>${data.email || 'غير معروف'}</td>
-                            <td>${role === 'admin' ? '👑 أدمن' : '👤 مستخدم'}</td>
+                            <td><span class="rank-badge ${r.class}">${r.text}</span></td>
                             <td>
-                                ${role !== 'admin' ? `<button class="btn btn-warning" onclick="makeAdmin('${doc.id}')">⭐ ترقية</button>` : ''}
-                                ${role !== 'admin' ? `<button class="btn btn-danger" onclick="deleteUser('${doc.id}')">🗑️ حذف</button>` : ''}
+                                <select class="rank-select" onchange="changeRank('${doc.id}', this.value)">
+                                    <option value="new" ${rank === 'new' ? 'selected' : ''}>🌱 عضو جديد</option>
+                                    <option value="active" ${rank === 'active' ? 'selected' : ''}>🔥 عضو فعال</option>
+                                    <option value="star" ${rank === 'star' ? 'selected' : ''}>⭐ عضو متألق</option>
+                                    <option value="moderator" ${rank === 'moderator' ? 'selected' : ''}>🛡️ مشرف</option>
+                                    <option value="admin" ${rank === 'admin' ? 'selected' : ''}>👑 مدير</option>
+                                </select>
+                            </td>
+                            <td>
+                                ${(role !== 'admin' && rank !== 'admin') ? `<button class="btn btn-danger" onclick="deleteUser('${doc.id}')">🗑️ حذف</button>` : ''}
                             </td>
                         </tr>`;
                     });
@@ -122,25 +165,27 @@
                 document.getElementById('usersList').innerHTML = html;
                 document.getElementById('usersCount').textContent = usersCount;
                 document.getElementById('adminsCount').textContent = adminsCount;
+                document.getElementById('modsCount').textContent = modsCount;
             }).catch(err => {
                 document.getElementById('usersList').innerHTML = `<p class="loading">❌ خطأ: ${err.message}</p>`;
             });
         }
 
         function deleteUser(uid) {
-            if (confirm('⚠️ هل أنت متأكد من حذف هذا المستخدم؟')) {
+            if (confirm('⚠️ هل أنت متأكد من حذف هذا المستخدم نهائياً؟')) {
                 db.collection('users').doc(uid).delete()
-                    .then(() => { showToast('✅ تم الحذف', 'success'); loadUsers(); })
+                    .then(() => { showToast('✅ تم حذف المستخدم بنجاح', 'success'); loadUsers(); })
                     .catch(err => showToast('❌ خطأ: ' + err.message, 'error'));
             }
         }
 
-        function makeAdmin(uid) {
-            if (confirm('⭐ ترقية هذا المستخدم لأدمن؟')) {
-                db.collection('users').doc(uid).update({ role: 'admin' })
-                    .then(() => { showToast('✅ تمت الترقية', 'success'); loadUsers(); })
-                    .catch(err => showToast('❌ خطأ: ' + err.message, 'error'));
-            }
+        function changeRank(uid, newRank) {
+            db.collection('users').doc(uid).update({ rank: newRank })
+                .then(() => {
+                    showToast('✅ تم تغيير الرتبة بنجاح', 'success');
+                    loadUsers();
+                })
+                .catch(err => showToast('❌ خطأ: ' + err.message, 'error'));
         }
     </script>
 </body>
