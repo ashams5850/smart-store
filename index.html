@@ -39,10 +39,31 @@
         .auth-btn-outline:hover { background: #46a0b2; color: white; }
         .auth-btn-logout { background: transparent; color: #dc3545; border: 2px solid #dc3545; box-shadow: none; }
         .auth-btn-logout:hover { background: #dc3545; color: white; }
+        .auth-btn-admin { background: #dc3545; color: white; }
+        .auth-btn-admin:hover { background: #c82333; }
+
         .auth-user { display: flex; align-items: center; gap: 8px; color: #1a1a2e; font-weight: bold; font-size: 15px; }
-        .auth-user img { width: 32px; height: 32px; border-radius: 50%; border: 2px solid #46a0b2; object-fit: cover; }
+        .auth-user img { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #46a0b2; object-fit: cover; }
         .header-auth { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        @media (max-width: 768px) { header .container { flex-direction: column; gap: 12px; } .header-auth { justify-content: center; } }
+
+        .rank-badge {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            margin-right: 5px;
+        }
+        .rank-admin { background: #dc3545; }
+        .rank-moderator { background: #6f42c1; }
+        .rank-star { background: #fd7e14; }
+        .rank-active { background: #28a745; }
+        .rank-new { background: #6c757d; }
+
+        @media (max-width: 768px) {
+            header .container { flex-direction: column; gap: 12px; }
+            .header-auth { justify-content: center; }
+        }
 
         .hero { background: linear-gradient(135deg, #46a0b2 0%, #2d7d8c 100%); color: white; padding: 80px 0; text-align: center; }
         .hero h2 { font-size: 42px; margin-bottom: 15px; }
@@ -141,6 +162,7 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <script>
         const firebaseConfig = {
@@ -154,29 +176,61 @@
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+        const db = firebase.firestore();
 
-        // ✅ دالة تحديث الواجهة (باستخدام localStorage كأولوية)
+        // ✅ دالة تحديث الواجهة
         function updateUI(user) {
             const section = document.getElementById('authSection');
             if (user) {
                 const displayName = user.displayName || user.email || 'مستخدم';
                 const shortName = displayName.length > 20 ? displayName.substring(0, 20) + '...' : displayName;
-                
-                // أولوية الصورة: localStorage ← user.photoURL ← default
-                let photo = localStorage.getItem('userPhotoURL');
-                if (!photo) {
-                    photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=46a0b2&color=fff&size=64`;
-                }
+                const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=46a0b2&color=fff&size=64`;
 
-                section.innerHTML = `
-                    <div class="auth-user">
-                        <img src="${photo}" alt="صورة الملف الشخصي" />
-                        <span>${shortName}</span>
-                    </div>
-                    <a href="profile.html" class="auth-btn" style="background:#46a0b2; color:white; padding:8px 22px; border-radius:8px; text-decoration:none; margin:0 5px;">👤 ملفي الشخصي</a>
-                    <a href="dashboard.html" class="auth-btn" style="background:#46a0b2; color:white; padding:8px 22px; border-radius:8px; text-decoration:none; margin:0 5px;">📊 لوحة التحكم</a>
-                    <button onclick="logout()" class="auth-btn auth-btn-logout" style="margin:0 5px;">🚪 خروج</button>
-                `;
+                // جلب الرتبة من Firestore
+                db.collection('users').doc(user.uid).get().then(doc => {
+                    let rankBadge = '';
+                    let adminBtn = '';
+                    
+                    if (doc.exists) {
+                        const rank = doc.data().rank || 'new';
+                        const role = doc.data().role || 'user';
+                        const rankMap = {
+                            'admin': { text: '👑 مدير', class: 'rank-admin' },
+                            'moderator': { text: '🛡️ مشرف', class: 'rank-moderator' },
+                            'star': { text: '⭐ عضو متألق', class: 'rank-star' },
+                            'active': { text: '🔥 عضو فعال', class: 'rank-active' },
+                            'new': { text: '🌱 عضو جديد', class: 'rank-new' }
+                        };
+                        const r = rankMap[rank] || rankMap['new'];
+                        rankBadge = `<span class="rank-badge ${r.class}">${r.text}</span>`;
+                        
+                        if (role === 'admin' || rank === 'admin') {
+                            adminBtn = `<a href="admin.html" class="auth-btn auth-btn-admin">👑 لوحة الأدمن</a>`;
+                        }
+                    }
+
+                    section.innerHTML = `
+                        <div class="auth-user">
+                            <img src="${photo}" alt="صورة الملف الشخصي" />
+                            ${rankBadge}
+                            <span>${shortName}</span>
+                        </div>
+                        <a href="profile.html" class="auth-btn">👤 ملفي الشخصي</a>
+                        <a href="dashboard.html" class="auth-btn">📊 لوحة التحكم</a>
+                        ${adminBtn}
+                        <button onclick="logout()" class="auth-btn auth-btn-logout">🚪 خروج</button>
+                    `;
+                }).catch(() => {
+                    section.innerHTML = `
+                        <div class="auth-user">
+                            <img src="${photo}" alt="صورة الملف الشخصي" />
+                            <span>${shortName}</span>
+                        </div>
+                        <a href="profile.html" class="auth-btn">👤 ملفي الشخصي</a>
+                        <a href="dashboard.html" class="auth-btn">📊 لوحة التحكم</a>
+                        <button onclick="logout()" class="auth-btn auth-btn-logout">🚪 خروج</button>
+                    `;
+                });
             } else {
                 section.innerHTML = `
                     <a href="signup.html" class="auth-btn">📝 تسجيل جديد</a>
@@ -185,10 +239,8 @@
             }
         }
 
-        // مراقبة حالة المستخدم
         auth.onAuthStateChanged(user => updateUI(user));
 
-        // دالة تسجيل الخروج (تمسح localStorage)
         function logout() {
             auth.signOut()
                 .then(() => {
