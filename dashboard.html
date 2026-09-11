@@ -3,53 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم - Smart Store</title>
+    <title>Smart Store - كروت ذكية احترافية</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
-        .dashboard-container { max-width: 800px; margin: 40px auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .dashboard-container h1 { color: #1a1a2e; font-size: 28px; margin-bottom: 10px; }
-        .dashboard-container h1 span { color: #46a0b2; }
-        .dashboard-container .user-info { background: #f8f9fa; padding: 12px 20px; border-radius: 12px; margin: 15px 0; font-size: 16px; color: #333; border-right: 5px solid #46a0b2; }
-        .dashboard-container .stats { display: flex; gap: 20px; margin: 25px 0; flex-wrap: wrap; }
-        .dashboard-container .stat-card { background: #f8f9fa; padding: 15px 25px; border-radius: 12px; flex: 1; min-width: 120px; text-align: center; }
-        .dashboard-container .stat-card h3 { margin: 0; font-size: 14px; color: #888; }
-        .dashboard-container .stat-card p { margin: 5px 0 0; font-size: 24px; font-weight: bold; color: #1a1a2e; }
-        .dashboard-container .btn { display: inline-block; padding: 12px 30px; background: #46a0b2; color: white; border: none; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; text-decoration: none; transition: 0.3s; font-family: 'Tajawal', sans-serif; }
-        .dashboard-container .btn:hover { background: #3a8a9a; transform: translateY(-2px); }
-        .dashboard-container .btn-logout { background: #dc3545; }
-        .dashboard-container .btn-logout:hover { background: #c82333; }
-        .dashboard-container .links { display: flex; gap: 15px; margin-top: 25px; flex-wrap: wrap; }
-        .visitor-badge { margin-top: 20px; text-align: center; color: #888; font-size: 14px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Tajawal', sans-serif; background: #f8f9fa; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        header { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 15px 0; position: sticky; top: 0; z-index: 100; }
+        header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        header h1 { color: #46a0b2; font-size: 24px; }
+        nav a { color: #1a1a2e; text-decoration: none; margin-right: 25px; font-weight: 700; transition: 0.3s; }
+        nav a:hover { color: #46a0b2; }
+
+        .auth-btn {
+            background: #46a0b2;
+            color: white;
+            border: none;
+            padding: 8px 22px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+            box-shadow: 0 2px 8px rgba(70,160,178,0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+        .auth-btn:hover { background: #3a8a9a; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(70,160,178,0.4); }
+        .auth-btn-outline { background: transparent; color: #46a0b2; border: 2px solid #46a0b2; box-shadow: none; }
+        .auth-btn-outline:hover { background: #46a0b2; color: white; }
+        .auth-btn-logout { background: transparent; color: #dc3545; border: 2px solid #dc3545; box-shadow: none; }
+        .auth-btn-logout:hover { background: #dc3545; color: white; }
+        .auth-btn-admin { background: #dc3545; color: white; }
+        .auth-btn-admin:hover { background: #c82333; }
+
+        .auth-user { display: flex; align-items: center; gap: 8px; color: #1a1a2e; font-weight: bold; font-size: 15px; }
+        .auth-user img { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #46a0b2; object-fit: cover; }
+        .header-auth { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+        .rank-badge {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            margin-right: 5px;
+        }
+        .rank-admin { background: #dc3545; }
+        .rank-moderator { background: #6f42c1; }
+        .rank-star { background: #fd7e14; }
+        .rank-active { background: #28a745; }
+        .rank-new { background: #6c757d; }
+
+        @media (max-width: 768px) {
+            header .container { flex-direction: column; gap: 12px; }
+            .header-auth { justify-content: center; }
+        }
+
+        .hero { background: linear-gradient(135deg, #46a0b2 0%, #2d7d8c 100%); color: white; padding: 80px 0; text-align: center; }
+        .hero h2 { font-size: 42px; margin-bottom: 15px; }
+        .hero h2 span { color: #ffe066; }
+        .hero p { font-size: 20px; margin-bottom: 30px; opacity: 0.9; }
+        .btn { display: inline-block; padding: 14px 35px; border-radius: 50px; font-weight: 700; text-decoration: none; transition: 0.3s; font-size: 18px; border: none; cursor: pointer; }
+        .btn-primary { background: #ffe066; color: #1a1a2e; }
+        .btn-primary:hover { background: #ffd633; transform: scale(1.05); }
+        .btn-secondary { background: rgba(255,255,255,0.2); color: white; border: 2px solid white; }
+        .btn-secondary:hover { background: rgba(255,255,255,0.3); }
+
+        .features { padding: 60px 0; background: white; }
+        .features h2 { text-align: center; font-size: 32px; margin-bottom: 40px; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center; }
+        .feature .icon { font-size: 40px; display: block; margin-bottom: 10px; }
+        .feature h3 { font-size: 20px; margin-bottom: 8px; }
+        .feature p { color: #666; }
+
+        footer { background: #1a1a2e; color: #aaa; padding: 30px 0; text-align: center; }
+        .social-links a { color: #aaa; text-decoration: none; margin: 0 10px; transition: 0.3s; }
+        .social-links a:hover { color: white; }
+        .visitor-badge { margin-top: 10px; font-size: 14px; color: #888; }
+        .visitor-badge img { vertical-align: middle; }
     </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <h1>👋 مرحباً بك في <span>لوحة التحكم</span></h1>
-        <div id="userInfo" class="user-info">📧 جاري تحميل البيانات...</div>
 
-        <div class="stats">
-            <div class="stat-card"><h3>👤 المستخدمين المسجلين</h3><p id="userCount">1</p></div>
-            <div class="stat-card"><h3>👁️ زوار اليوم</h3><p id="visitorCount">--</p></div>
+    <header>
+        <div class="container">
+            <h1>🛍️ Smart Store</h1>
+            <nav>
+                <a href="index.html">الرئيسية</a>
+                <a href="products.html">الباقات</a>
+                <a href="contact.html">تواصل معنا</a>
+            </nav>
+            <div class="header-auth" id="authSection"></div>
         </div>
+    </header>
 
-        <div class="links">
-            <a href="index.html" class="btn">🏠 العودة للرئيسية</a>
-            <a href="products.html" class="btn">🛍️ الباقات</a>
-            <button onclick="logoutUser()" class="btn btn-logout">🚪 تسجيل خروج</button>
+    <section class="hero">
+        <div class="container">
+            <h2>📱 هويتك الرقمية في <span>كارت ذكي</span></h2>
+            <p>شارك بياناتك، موقعك، وتقييماتك بلمسة واحدة</p>
+            <div class="hero-buttons">
+                <a href="products.html" class="btn btn-primary">🚀 اطلب الآن</a>
+                <a href="#features" class="btn btn-secondary">تعرف على المزيد</a>
+            </div>
         </div>
+    </section>
 
-        <div class="visitor-badge">
-            👁️ عدد الزوار الكلي:
-            <a href="https://visitorbadge.io/status?path=ashams5850.smart-store">
-                <img src="https://api.visitorbadge.io/api/visitors?path=ashams5850.smart-store&label=زوار&labelColor=%23697689&countColor=%2346a0b2" />
-            </a>
+    <section id="features" class="features">
+        <div class="container">
+            <h2>✨ مميزات الكارت الذكي</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <span class="icon">📇</span>
+                    <h3>كارت ذكي</h3>
+                    <p>كارت إلكتروني يحوي كل بياناتك المهنية</p>
+                </div>
+                <div class="feature">
+                    <span class="icon">📱</span>
+                    <h3>QR Code</h3>
+                    <p>يمسح العميل الكود ويوصل لك فوراً</p>
+                </div>
+                <div class="feature">
+                    <span class="icon">⭐</span>
+                    <h3>Google Review</h3>
+                    <p>يوجه العميل مباشرة لتقييمك على جوجل</p>
+                </div>
+                <div class="feature">
+                    <span class="icon">💬</span>
+                    <h3>WhatsApp</h3>
+                    <p>يتواصل معك العميل بضغطة واحدة</p>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
+    <footer>
+        <div class="container">
+            <p>Smart Store &copy; 2026 - الفيوم، مصر</p>
+            <div class="social-links">
+                <a href="https://wa.me/201012899046" target="_blank">📱 واتساب</a>
+                <a href="https://www.facebook.com" target="_blank">📘 فيسبوك</a>
+                <a href="mailto:ashams5850@gmail.com">📧 بريد</a>
+            </div>
+            <div class="visitor-badge">
+                👁️ عدد الزوار:
+                <a href="https://visitorbadge.io/status?path=ashams5850.smart-store" target="_blank">
+                    <img src="https://api.visitorbadge.io/api/visitors?path=ashams5850.smart-store&label=زوار&labelColor=%23697689&countColor=%2346a0b2" alt="عداد الزوار" />
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyDqOyFk7cauFKQw6h__E78LkSCiBHkgJSE",
@@ -62,22 +176,79 @@
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-        const userInfo = document.getElementById('userInfo');
+        const db = firebase.firestore();
 
-        auth.onAuthStateChanged(user => {
+        // ✅ دالة تحديث الواجهة
+        function updateUI(user) {
+            const section = document.getElementById('authSection');
             if (user) {
                 const displayName = user.displayName || user.email || 'مستخدم';
-                userInfo.innerHTML = `👋 مرحباً <strong>${displayName}</strong>`;
-            } else {
-                window.location.href = 'login.html';
-            }
-        });
+                const shortName = displayName.length > 20 ? displayName.substring(0, 20) + '...' : displayName;
+                const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=46a0b2&color=fff&size=64`;
 
-        function logoutUser() {
-            auth.signOut().then(() => {
-                alert('✅ تم تسجيل الخروج بنجاح!');
-                window.location.href = 'index.html';
-            }).catch(err => alert('❌ خطأ: ' + err.message));
+                // جلب الرتبة من Firestore
+                db.collection('users').doc(user.uid).get().then(doc => {
+                    let rankBadge = '';
+                    let adminBtn = '';
+                    
+                    if (doc.exists) {
+                        const rank = doc.data().rank || 'new';
+                        const role = doc.data().role || 'user';
+                        const rankMap = {
+                            'admin': { text: '👑 مدير', class: 'rank-admin' },
+                            'moderator': { text: '🛡️ مشرف', class: 'rank-moderator' },
+                            'star': { text: '⭐ عضو متألق', class: 'rank-star' },
+                            'active': { text: '🔥 عضو فعال', class: 'rank-active' },
+                            'new': { text: '🌱 عضو جديد', class: 'rank-new' }
+                        };
+                        const r = rankMap[rank] || rankMap['new'];
+                        rankBadge = `<span class="rank-badge ${r.class}">${r.text}</span>`;
+                        
+                        if (role === 'admin' || rank === 'admin') {
+                            adminBtn = `<a href="admin.html" class="auth-btn auth-btn-admin">👑 لوحة الأدمن</a>`;
+                        }
+                    }
+
+                    section.innerHTML = `
+                        <div class="auth-user">
+                            <img src="${photo}" alt="صورة الملف الشخصي" />
+                            ${rankBadge}
+                            <span>${shortName}</span>
+                        </div>
+                        <a href="profile.html" class="auth-btn">👤 ملفي الشخصي</a>
+                        <a href="dashboard.html" class="auth-btn">📊 لوحة التحكم</a>
+                        ${adminBtn}
+                        <button onclick="logout()" class="auth-btn auth-btn-logout">🚪 خروج</button>
+                    `;
+                }).catch(() => {
+                    section.innerHTML = `
+                        <div class="auth-user">
+                            <img src="${photo}" alt="صورة الملف الشخصي" />
+                            <span>${shortName}</span>
+                        </div>
+                        <a href="profile.html" class="auth-btn">👤 ملفي الشخصي</a>
+                        <a href="dashboard.html" class="auth-btn">📊 لوحة التحكم</a>
+                        <button onclick="logout()" class="auth-btn auth-btn-logout">🚪 خروج</button>
+                    `;
+                });
+            } else {
+                section.innerHTML = `
+                    <a href="signup.html" class="auth-btn">📝 تسجيل جديد</a>
+                    <a href="login.html" class="auth-btn auth-btn-outline">🔐 دخول</a>
+                `;
+            }
+        }
+
+        auth.onAuthStateChanged(user => updateUI(user));
+
+        function logout() {
+            auth.signOut()
+                .then(() => {
+                    localStorage.removeItem('userPhotoURL');
+                    alert('✅ تم تسجيل الخروج بنجاح!');
+                    window.location.href = 'index.html';
+                })
+                .catch(err => alert('❌ خطأ: ' + err.message));
         }
     </script>
 </body>
