@@ -16,6 +16,7 @@
         .signup-container input:focus { border-color: #46a0b2; outline: none; box-shadow: 0 0 0 4px rgba(70,160,178,0.1); }
         .signup-container button { width: 100%; padding: 15px; background: #46a0b2; color: white; border: none; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .signup-container button:hover { background: #3a8a9a; transform: scale(1.02); }
+        .signup-container button:disabled { opacity: 0.6; cursor: not-allowed; }
         .signup-container .links { text-align: center; margin-top: 20px; }
         .signup-container .links a { color: #46a0b2; text-decoration: none; font-weight: bold; }
         .signup-container .links a:hover { text-decoration: underline; }
@@ -33,21 +34,22 @@
         <p class="sub">أنشئ حسابك في Smart Store</p>
         <div id="errorMsg" class="error-msg"></div>
         <div id="successMsg" class="success-msg"></div>
-        
+
         <div class="name-row">
             <input type="text" id="firstName" placeholder="👤 الاسم الأول" required>
             <input type="text" id="lastName" placeholder="👤 اسم العائلة" required>
         </div>
         <input type="email" id="signupEmail" placeholder="📧 البريد الإلكتروني" required>
         <input type="password" id="signupPassword" placeholder="🔑 كلمة المرور (6 أحرف على الأقل)" required>
-        
-        <button onclick="signupUser()">📝 إنشاء حساب</button>
+
+        <button id="signupBtn" onclick="signupUser()">📝 إنشاء حساب</button>
         <div class="links">لديك حساب؟ <a href="login.html">تسجيل الدخول</a></div>
         <div class="links"><a href="index.html">⬅ العودة للرئيسية</a></div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyDqOyFk7cauFKQw6h__E78LkSCiBHkgJSE",
@@ -60,18 +62,19 @@
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+        const db = firebase.firestore();
 
-        function showError(msg) { 
-            const el = document.getElementById('errorMsg'); 
-            el.textContent = msg; 
-            el.style.display = 'block'; 
-            setTimeout(() => el.style.display = 'none', 5000); 
+        function showError(msg) {
+            const el = document.getElementById('errorMsg');
+            el.textContent = msg;
+            el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 5000);
         }
-        function showSuccess(msg) { 
-            const el = document.getElementById('successMsg'); 
-            el.textContent = msg; 
-            el.style.display = 'block'; 
-            setTimeout(() => el.style.display = 'none', 3000); 
+        function showSuccess(msg) {
+            const el = document.getElementById('successMsg');
+            el.textContent = msg;
+            el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 3000);
         }
 
         function signupUser() {
@@ -89,17 +92,34 @@
                 return;
             }
 
+            const btn = document.getElementById('signupBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ جاري إنشاء الحساب...';
+
             auth.createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    return userCredential.user.updateProfile({
+                    const user = userCredential.user;
+                    return user.updateProfile({
                         displayName: firstName + ' ' + lastName
+                    }).then(() => {
+                        // ✅ إضافة المستخدم إلى Firestore
+                        return db.collection('users').doc(user.uid).set({
+                            email: email,
+                            displayName: firstName + ' ' + lastName,
+                            role: 'user',
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
                     });
                 })
                 .then(() => {
                     showSuccess('✅ تم إنشاء الحساب بنجاح!');
                     setTimeout(() => window.location.href = 'login.html', 1500);
                 })
-                .catch(err => showError('❌ ' + err.message));
+                .catch(err => {
+                    showError('❌ ' + err.message);
+                    btn.disabled = false;
+                    btn.textContent = '📝 إنشاء حساب';
+                });
         }
     </script>
 </body>
